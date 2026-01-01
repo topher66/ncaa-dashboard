@@ -1,7 +1,7 @@
 {
   "framework": "nextjs",
-  "buildCommand": "npm run build",
-  "outputDirectory": ".next",
-  "installCommand": "npm install",
-  "devCommand": "npm run dev"
+  "buildCommand": "cd ncaa-pace-dashboard && npm run build",
+  "outputDirectory": "ncaa-pace-dashboard/.next",
+  "installCommand": "cd ncaa-pace-dashboard && npm install",
+  "devCommand": "cd ncaa-pace-dashboard && npm run dev"
 }
