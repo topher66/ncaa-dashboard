@@ -189,11 +189,18 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 text-white p-8">
+      {/* Beautiful Header Section */}
       <div className="text-center mb-12">
-        <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-red-500 to-purple-600 bg-clip-text text-transparent">
-          🏀 Live NCAA Betting Analytics
-        </h1>
-        <p className="text-xl text-gray-300 mb-6">Real-time pace analysis & betting insights</p>
+        <div className="mb-6">
+          <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-red-500 to-purple-600 bg-clip-text text-transparent drop-shadow-lg">
+            🏀 Live NCAA Betting Analytics
+          </h1>
+          <div className="w-32 h-1 bg-gradient-to-r from-orange-400 to-purple-600 mx-auto rounded-full"></div>
+        </div>
+        
+        <p className="text-2xl text-gray-300 mb-8 font-light">
+          Real-time pace analysis & betting insights
+        </p>
         
         {isDemo && (
           <div className="flex justify-center mb-8">
@@ -241,37 +248,36 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="insights-header">
-                📊 BETTING INSIGHTS
-              </div>
-              
-              <div className="space-y-3">
-                <div className="stat-row">
-                  <span className="stat-label">Pace vs Average:</span>
-                  <span className={`stat-value ${getPaceColor(game.paceVsAverage)}`}>
-                    {game.paceVsAverage > 0 ? '+' : ''}{game.paceVsAverage}
-                  </span>
-                </div>
-                
-                <div className="stat-row">
-                  <span className="stat-label">O/U Edge:</span>
-                  <span className={getBadgeClass(game.overUnderEdge)}>
-                    {game.overUnderEdge}
-                  </span>
-                </div>
-                
-                <div className="stat-row">
-                  <span className="stat-label">Game Tempo:</span>
-                  <span className={getTempoBadgeClass(game.gameTempo)}>
-                    {game.gameTempo}
-                  </span>
-                </div>
-                
-                <div className="stat-row">
-                  <span className="stat-label">Blowout Risk:</span>
-                  <span className={`stat-value ${getBlowoutColor(game.blowoutRisk)}`}>
-                    {game.blowoutRisk}%
-                  </span>
+              {/* Clean betting insights without red header box */}
+              <div className="border-t border-gray-600 pt-4">
+                <div className="space-y-3">
+                  <div className="stat-row">
+                    <span className="stat-label">Pace vs Average:</span>
+                    <span className={`stat-value ${getPaceColor(game.paceVsAverage)}`}>
+                      {game.paceVsAverage > 0 ? '+' : ''}{game.paceVsAverage}
+                    </span>
+                  </div>
+                  
+                  <div className="stat-row">
+                    <span className="stat-label">O/U Edge:</span>
+                    <span className={getBadgeClass(game.overUnderEdge)}>
+                      {game.overUnderEdge}
+                    </span>
+                  </div>
+                  
+                  <div className="stat-row">
+                    <span className="stat-label">Game Tempo:</span>
+                    <span className={getTempoBadgeClass(game.gameTempo)}>
+                      {game.gameTempo}
+                    </span>
+                  </div>
+                  
+                  <div className="stat-row">
+                    <span className="stat-label">Blowout Risk:</span>
+                    <span className={`stat-value ${getBlowoutColor(game.blowoutRisk)}`}>
+                      {game.blowoutRisk}%
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
