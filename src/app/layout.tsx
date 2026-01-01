@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NCAA Basketball Pace Dashboard",
-  description: "Live NCAA men's basketball scores and pace analytics",
+  title: "NCAA Betting Analytics Dashboard",
+  description: "Live NCAA men's basketball scores with real-time betting insights and pace analytics",
 };
 
 export default function RootLayout({
