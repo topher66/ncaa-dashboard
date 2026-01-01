@@ -104,9 +104,9 @@ export default function Home() {
       ) : games.length === 0 ? (
         <p className="text-center text-3xl font-bold text-yellow-300 mt-32">Go build Legos.</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+        <div className="game-grid">
           {games.map((game) => (
-            <div key={game.id} className="bg-gray-800 rounded-lg p-6 shadow-lg">
+            <div key={game.id} className="game-card">
               <div className="text-center text-sm text-gray-400 mb-4">{game.clock}</div>
               
               <div className="space-y-3 mb-6">
