@@ -193,13 +193,14 @@ export default function Home() {
   const getPaceColor = (pace: number) => {
     if (pace > 0) return 'text-green-400';
     if (pace < 0) return 'text-red-400';
-    return 'text-gray-400';
+    return 'text-gray-300';
   };
 
   const getBlowoutColor = (risk: number) => {
-    if (risk > 70) return 'text-red-400';
-    if (risk > 40) return 'text-yellow-400';
-    return 'text-green-400';
+    if (risk > 70) return 'text-red-300 font-bold';
+    if (risk > 40) return 'text-yellow-300 font-bold';
+    if (risk > 15) return 'text-orange-300 font-bold';
+    return 'text-green-300 font-bold';
   };
 
   return (
@@ -268,7 +269,7 @@ export default function Home() {
                 <div className="space-y-2">
                   <div className="stat-row">
                     <span className="stat-label">Pace vs Average:</span>
-                    <span className={`stat-value ${getPaceColor(game.paceVsAverage)}`}>
+                    <span className={`pace-vs-average ${getPaceColor(game.paceVsAverage)}`}>
                       {game.paceVsAverage > 0 ? '+' : ''}{game.paceVsAverage}
                     </span>
                   </div>
@@ -289,7 +290,7 @@ export default function Home() {
                   
                   <div className="stat-row">
                     <span className="stat-label">Blowout Risk:</span>
-                    <span className={`stat-value ${getBlowoutColor(game.blowoutRisk)}`}>
+                    <span className={`blowout-value ${getBlowoutColor(game.blowoutRisk)}`}>
                       {game.blowoutRisk}%
                     </span>
                   </div>
