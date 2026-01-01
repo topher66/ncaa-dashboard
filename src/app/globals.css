@@ -217,6 +217,17 @@ body {
   text-shadow: 0 0 8px rgba(0, 230, 118, 0.3);
 }
 
+.confidence-badge {
+  font-size: 0.7rem;
+  color: #38bdf8; /* Light blue for confidence */
+  font-weight: 600;
+  margin-left: 0.5rem;
+  background: rgba(56, 189, 248, 0.1);
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.3rem;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
 .blowout-value {
   font-size: 1rem; /* Larger font for blowout risk */
   text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
