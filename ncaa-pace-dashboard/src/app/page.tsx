@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 
 interface Game {
@@ -22,28 +24,46 @@ export default function Home() {
       const data = await res.json();
 
       const liveGames: Game[] = data.events
-        .filter((event: any) => event.status.type.name !== 'STATUS_FINAL' && event.competitions[0].status.type.detail.includes(' - '))
-        .map((event: any) => {
-          const comp = event.competitions[0];
-          const home = comp.competitors.find((c: any) => c.homeAway === 'home');
-          const away = comp.competitors.find((c: any) => c.homeAway === 'away');
+        .filter((event: unknown) => {
+          const e = event as { status: { type: { name: string } }, competitions: Array<{ status: { type: { detail: string } } }> };
+          return e.status.type.name !== 'STATUS_FINAL' && e.competitions[0].status.type.detail.includes(' - ');
+        })
+        .map((event: unknown) => {
+          const e = event as {
+            id: string;
+            competitions: Array<{
+              competitors: Array<{
+                homeAway: string;
+                team: { displayName: string };
+                score?: string;
+              }>;
+              status: {
+                clockDisplayValue?: string;
+                period: number;
+                type: { detail: string };
+              };
+            }>;
+          };
+          const comp = e.competitions[0];
+          const home = comp.competitors.find((c) => c.homeAway === 'home');
+          const away = comp.competitors.find((c) => c.homeAway === 'away');
 
           const clockParts = comp.status.clockDisplayValue ? comp.status.clockDisplayValue.split(':') : ['0', '00'];
           const minutesLeftInPeriod = parseInt(clockParts[0]) + parseInt(clockParts[1]) / 60;
           const period = comp.status.period;
 
           const minutesPlayed = period <= 1 ? (20 - minutesLeftInPeriod) : (40 - minutesLeftInPeriod);
-          const totalPoints = (home?.score || 0) + (away?.score || 0);
+          const totalPoints = parseInt(home?.score || '0') + parseInt(away?.score || '0');
           const pace = minutesPlayed > 0 ? (totalPoints / minutesPlayed) * 40 : 0;
           const minutesRemaining = period <= 1 ? 20 + minutesLeftInPeriod : minutesLeftInPeriod;
           const projectedTotal = Math.round(totalPoints + (pace / 40) * minutesRemaining);
 
           return {
-            id: event.id,
-            homeTeam: home.team.displayName,
-            awayTeam: away.team.displayName,
-            homeScore: parseInt(home.score || '0'),
-            awayScore: parseInt(away.score || '0'),
+            id: e.id,
+            homeTeam: home?.team.displayName || 'Unknown',
+            awayTeam: away?.team.displayName || 'Unknown',
+            homeScore: parseInt(home?.score || '0'),
+            awayScore: parseInt(away?.score || '0'),
             clock: comp.status.type.detail,
             period,
             pace: Math.round(pace),
@@ -60,14 +80,26 @@ export default function Home() {
   };
 
   useEffect(() => {
-    fetchScores();
-    const interval = setInterval(fetchScores, 8000);
-    return () => clearInterval(interval);
+    let isMounted = true;
+    
+    const loadScores = async () => {
+      if (isMounted) {
+        await fetchScores();
+      }
+    };
+    
+    loadScores();
+    const interval = setInterval(loadScores, 8000);
+    
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, []);
 
   return (
     <main className="min-h-screen bg-gray-900 text-white p-8">
-      <h1 className="text-4xl font-bold text-center mb-8">Live NCAA Men's Basketball Pace Dashboard</h1>
+      <h1 className="text-4xl font-bold text-center mb-8">Live NCAA Men&apos;s Basketball Pace Dashboard</h1>
       {loading ? (
         <p className="text-center text-xl">Loading live games...</p>
       ) : games.length === 0 ? (
