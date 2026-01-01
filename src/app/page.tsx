@@ -18,7 +18,7 @@ interface Game {
 }
 
 // Demo data with varied tempo classifications
-const demoGames: Game[] = [
+const DEMO_GAMES: Game[] = [
   {
     id: 'demo1',
     homeTeam: 'Duke Blue Devils',
@@ -84,7 +84,6 @@ const demoGames: Game[] = [
 export default function Home() {
   const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isDemo, setIsDemo] = useState(false);
 
   const fetchScores = useCallback(async () => {
     try {
@@ -154,18 +153,15 @@ export default function Home() {
 
       if (liveGames.length === 0) {
         // No live games, show demo data
-        setGames(demoGames);
-        setIsDemo(true);
+        setGames(DEMO_GAMES);
       } else {
         setGames(liveGames);
-        setIsDemo(false);
       }
       setLoading(false);
     } catch (err) {
       console.error(err);
       // On error, show demo data
-      setGames(demoGames);
-      setIsDemo(true);
+      setGames(DEMO_GAMES);
       setLoading(false);
     }
   }, []);
@@ -176,124 +172,71 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [fetchScores]);
 
-  const getBadgeClass = (edge: string) => {
-    switch (edge) {
-      case 'OVER LEAN': return 'insight-badge badge-over';
-      case 'UNDER LEAN': return 'insight-badge badge-under';
-      default: return 'insight-badge badge-neutral';
-    }
-  };
-
-  const getTempoBadgeClass = (tempo: string) => {
-    if (tempo.includes('HOT')) return 'insight-badge badge-hot';
-    if (tempo.includes('COLD')) return 'insight-badge badge-cold';
-    return 'insight-badge badge-neutral';
-  };
-
-  const getPaceColor = (pace: number) => {
-    if (pace > 0) return 'text-green-400';
-    if (pace < 0) return 'text-red-400';
-    return 'text-gray-300';
-  };
-
-  const getBlowoutColor = (risk: number) => {
-    if (risk > 70) return 'text-red-300 font-bold';
-    if (risk > 40) return 'text-yellow-300 font-bold';
-    if (risk > 15) return 'text-orange-300 font-bold';
-    return 'text-green-300 font-bold';
-  };
+  const gamesToDisplay = games.length > 0 ? games : DEMO_GAMES;
+  const isDemo = games.length === 0 || games === DEMO_GAMES;
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 text-white p-6">
-      {/* Optimized Header Section */}
-      <div className="text-center mb-8">
-        <div className="mb-4">
-          <h1 className="main-title">
-            🏀 Live NCAA Betting Analytics
-          </h1>
-          <div className="gradient-line"></div>
-        </div>
-        
-        <p className="subtitle">
-          Real-time pace analysis & betting insights
-        </p>
-        
+    <main className="main-container">
+      <div className="header-container">
+        <h1 className="main-title">🏀 Live NCAA Betting Analytics</h1>
+        <div className="gradient-line"></div>
+        <p className="subtitle">Real-time pace analysis & betting insights</p>
         {isDemo && (
-          <div className="flex justify-center mb-6">
-            <span className="demo-badge">
-              🎮 DEMO MODE - No live games today
-            </span>
-          </div>
+          <p className="demo-mode-badge">🎮 DEMO MODE - No live games today</p>
         )}
       </div>
-      
-      {loading ? (
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-10 w-10 border-b-2 border-orange-500 mb-4"></div>
-          <p className="text-lg text-gray-300">Loading live games...</p>
-        </div>
-      ) : games.length === 0 ? (
-        <p className="text-center text-2xl font-bold text-yellow-300 mt-20">Go build Legos.</p>
+
+      {loading && games.length === 0 ? (
+        <div className="loading-spinner"></div>
+      ) : gamesToDisplay.length === 0 ? (
+        <p className="no-games-message">Go build Legos.</p>
       ) : (
         <div className="game-grid">
-          {games.map((game) => (
+          {gamesToDisplay.map((game) => (
             <div key={game.id} className="game-card">
-              <div className="text-center mb-4">
-                <span className="clock-display">{game.clock}</span>
-              </div>
-              
-              <div className="space-y-2 mb-5">
-                <div className="flex justify-between items-center">
+              <div className="game-clock">{game.clock}</div>
+              <div className="team-scores">
+                <div className="team-row">
                   <span className="team-name">{game.awayTeam}</span>
-                  <span className="team-score">{game.awayScore}</span>
+                  <span className="score">{game.awayScore}</span>
                 </div>
-                <div className="flex justify-between items-center">
+                <div className="team-row">
                   <span className="team-name">{game.homeTeam}</span>
-                  <span className="team-score">{game.homeScore}</span>
+                  <span className="score">{game.homeScore}</span>
                 </div>
               </div>
-
-              <div className="space-y-2 mb-4">
+              <div className="game-stats">
                 <div className="stat-row">
                   <span className="stat-label">Current Pace:</span>
-                  <span className="pace-value">{game.pace} pts/40 min</span>
+                  <span className="stat-value pace-value">{game.pace} pts/40 min</span>
                 </div>
                 <div className="stat-row">
                   <span className="stat-label">Projected Final Total:</span>
-                  <span className="projected-total">{game.projectedTotal}</span>
+                  <span className="stat-value projected-total-value">{game.projectedTotal}</span>
                 </div>
-              </div>
-
-              {/* Clean betting insights */}
-              <div className="border-t border-gray-600 pt-3">
-                <div className="space-y-2">
-                  <div className="stat-row">
-                    <span className="stat-label">Pace vs Average:</span>
-                    <span className={`pace-vs-average ${getPaceColor(game.paceVsAverage)}`}>
-                      {game.paceVsAverage > 0 ? '+' : ''}{game.paceVsAverage}
-                    </span>
-                  </div>
-                  
-                  <div className="stat-row">
-                    <span className="stat-label">O/U Edge:</span>
-                    <span className={getBadgeClass(game.overUnderEdge)}>
-                      {game.overUnderEdge}
-                    </span>
-                  </div>
-                  
-                  <div className="stat-row">
-                    <span className="stat-label">Game Tempo:</span>
-                    <span className={getTempoBadgeClass(game.gameTempo)}>
-                      {game.gameTempo}
-                    </span>
-                  </div>
-                  
-                  <div className="stat-row">
-                    <span className="stat-label">Blowout Risk:</span>
-                    <span className={`blowout-value ${getBlowoutColor(game.blowoutRisk)}`}>
-                      {game.blowoutRisk}%
-                    </span>
-                  </div>
+                <div className="stat-row">
+                  <span className="stat-label">Pace vs Average:</span>
+                  <span className={`stat-value pace-vs-average ${game.paceVsAverage > 0 ? 'text-green-300' : game.paceVsAverage < 0 ? 'text-red-300' : 'text-gray-400'}`}>
+                    {game.paceVsAverage > 0 ? '+' : ''}{game.paceVsAverage}
+                  </span>
+                </div>
+                <div className="stat-row">
+                  <span className="stat-label">O/U Edge:</span>
+                  <span className={`stat-value ${game.overUnderEdge === 'OVER LEAN' ? 'text-green-300' : game.overUnderEdge === 'UNDER LEAN' ? 'text-red-300' : 'text-gray-400'}`}>
+                    {game.overUnderEdge}
+                  </span>
+                </div>
+                <div className="stat-row">
+                  <span className="stat-label">Game Tempo:</span>
+                  <span className={`stat-value ${game.gameTempo === 'HOT 🔥' ? 'text-red-300' : game.gameTempo === 'COLD 🥶' ? 'text-blue-300' : 'text-gray-400'}`}>
+                    {game.gameTempo}
+                  </span>
+                </div>
+                <div className="stat-row">
+                  <span className="stat-label">Blowout Risk:</span>
+                  <span className={`stat-value blowout-value ${game.blowoutRisk > 70 ? 'text-red-300' : game.blowoutRisk > 40 ? 'text-yellow-300' : game.blowoutRisk > 15 ? 'text-orange-300' : 'text-green-300'} font-bold`}>
+                    {game.blowoutRisk}%
+                  </span>
                 </div>
               </div>
             </div>
