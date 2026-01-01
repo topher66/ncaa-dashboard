@@ -2,25 +2,199 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Force card layout styles */
+/* Premium Professional Betting Dashboard Styles */
 .game-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 2rem;
   max-width: 1400px;
   margin: 0 auto;
+  padding: 0 1rem;
 }
 
 .game-card {
-  background: #1f2937;
-  border-radius: 0.5rem;
-  padding: 1.5rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border: 1px solid #334155;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 
+    0 20px 25px -5px rgba(0, 0, 0, 0.3),
+    0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Ensure proper responsive behavior */
+.game-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #f59e0b, #ef4444, #8b5cf6);
+  opacity: 0.8;
+}
+
+.game-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 25px 35px -5px rgba(0, 0, 0, 0.4),
+    0 15px 15px -5px rgba(0, 0, 0, 0.3);
+  border-color: #475569;
+}
+
+.team-score {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffffff, #e2e8f0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.team-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.clock-display {
+  background: linear-gradient(135deg, #1e40af, #3730a3);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  border: 1px solid #3b82f6;
+}
+
+.pace-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fbbf24;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.projected-total {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #10b981;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.insights-header {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.3);
+  border: 1px solid #ef4444;
+}
+
+.insight-badge {
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.badge-over {
+  background: linear-gradient(135deg, #059669, #047857);
+  color: white;
+  border: 1px solid #10b981;
+}
+
+.badge-under {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  border: 1px solid #3b82f6;
+}
+
+.badge-neutral {
+  background: linear-gradient(135deg, #6b7280, #4b5563);
+  color: white;
+  border: 1px solid #9ca3af;
+}
+
+.badge-hot {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  color: white;
+  border: 1px solid #ef4444;
+  animation: pulse 2s infinite;
+}
+
+.badge-cold {
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  color: white;
+  border: 1px solid #38bdf8;
+}
+
+.demo-badge {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #1f2937;
+  padding: 0.5rem 1.5rem;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.3);
+  border: 2px solid #fbbf24;
+  animation: glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes glow {
+  from { box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.3); }
+  to { box-shadow: 0 8px 15px -3px rgba(245, 158, 11, 0.5); }
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(71, 85, 105, 0.3);
+}
+
+.stat-row:last-child {
+  border-bottom: none;
+}
+
+.stat-label {
+  color: #cbd5e1;
+  font-weight: 500;
+}
+
+.stat-value {
+  font-weight: 700;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
   .game-grid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 0 0.5rem;
+  }
+  
+  .game-card {
+    padding: 1.5rem;
+  }
+  
+  .team-score {
+    font-size: 2rem;
   }
 }
